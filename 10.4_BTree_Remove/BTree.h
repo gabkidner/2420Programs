@@ -23,8 +23,7 @@ public:
   void postOrder();
   int nodeCount();
   int leavesCount();
-
-
+  shared_ptr<Node<T>> find(const T& item);
 private:
   void preOrder(shared_ptr<Node<T>> ptr);
   void inOrder(shared_ptr<Node<T>> ptr);
@@ -34,6 +33,7 @@ private:
   int leavesCount(shared_ptr<Node<T>> ptr);
   shared_ptr<Node<T>> copyNode(shared_ptr<Node<T>> ptr);
   shared_ptr<Node<T>> root;
+  shared_ptr<Node<T>> find(const T& item, shared_ptr<Node<T>> ptr);
 };
 
 template<typename T>
@@ -159,4 +159,21 @@ int BTree<T>::leavesCount(shared_ptr<Node<T>> ptr){
     return 1;
   }
   return 0;
+}
+
+template<typename T>
+shared_ptr<Node<T>> BTree<T>::find(const T& item){
+  cout << "Preorder: ";
+  inOrder();
+  return find(item, root);
+}
+
+template<typename T>
+shared_ptr<Node<T>> BTree<T>::find(const T& item, shared_ptr<Node<T>> ptr){
+  cout << "\nItem: " << item << " ptr->data: " << ptr->data << endl;
+  if(ptr->data == item){
+    return ptr;
+  }
+  return find(item,ptr->left);
+  return find(item,ptr->right);
 }
