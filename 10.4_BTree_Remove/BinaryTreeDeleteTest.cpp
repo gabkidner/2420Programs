@@ -8,16 +8,16 @@ bool checkTest(string testName, bool condition);
 bool checkTest(string testName, int whatItShouldBe, int whatItIs);
 void testFindMethod(BTree<int>);
 //void testRightMostNodeSearch(BTree<int>);
-//void testFindParent(BTree<int>);
-//void deleteTest(BTree<int>);
+void testFindParent(BTree<int>);
+void deleteTest(BTree<int>);
 BTree<int> populateTree();
 
 int main() {
 	BTree<int> myTree = populateTree();
 	testFindMethod(myTree);
 	//testRightMostNodeSearch(myTree);
-	//testFindParent(myTree);
-	//deleteTest(myTree);
+	testFindParent(myTree);
+	deleteTest(myTree);
 	system("pause");
 	return 0;
 }
@@ -32,7 +32,7 @@ BTree <int> populateTree() {
 		myTree.insert(values[i]);
 	}
 
-	myTree.inOrder();
+	//myTree.inOrder();
 	cout << endl;
 
 	return myTree;
@@ -50,7 +50,8 @@ void testFindMethod(BTree<int> myTree) {
 	auto ptrchild = myTree.findRightMostNode(ptr);
 
 	checkTest("Test 3: RightNodeTest(49)", 67, ptrchild->data);
-}
+}*/
+
 void testFindParent(BTree<int> myTree) {
 	auto child1 = myTree.find(25);
 	auto ptr1 = myTree.findParent(child1);
@@ -63,90 +64,90 @@ void deleteTest(BTree<int> myTree) {
 	myTree.remove(13);
 	auto ptr = myTree.find(13);
 	if (!checkTest("Test 5: Delete Leaf: 13", ptr == nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 
 	myTree.remove(67);
 	ptr = myTree.find(67);
 	if (!checkTest("Test 6: Delete Node with Left Child: 67", ptr == nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 
 	ptr = myTree.find(55);
 	if (!checkTest("Test 7: Rest of tree still in tact", ptr != nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 	myTree.remove(42);
 	ptr = myTree.find(42);
 	if (!checkTest("Test 8: Delete Node with Right Child: 42", ptr == nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 
 	ptr = myTree.find(55);
 	if (!checkTest("Test 9: Rest of tree still in tact", ptr != nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 
 	myTree.remove(73);
 	ptr = myTree.find(73);
 	if (!checkTest("Test 10 Delete Node with two children: 73", ptr == nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 
 	ptr = myTree.find(49);
 	if (!checkTest("Test 11: Rest of left tree still in tact", ptr != nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 
 	ptr = myTree.find(95);
 	if (!checkTest("Test 12: Rest of right tree still in tact", ptr != nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 
 	ptr = myTree.find(63);
 	if (!checkTest("Test 13: Right most child still in tact", ptr != nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 
 	myTree.remove(37);
 	ptr = myTree.find(37);
 	if (!checkTest("Test 14 Delete root: 37", ptr == nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 
 	ptr = myTree.find(32);
 	if (!checkTest("Test 15 Left Children still present", ptr != nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
 	ptr = myTree.find(95);
 	if (!checkTest("Test 16 Right Children still present", ptr != nullptr)) {
-		cout << "In Order: ";
-		myTree.inOrder();
+		//cout << "In Order: ";
+		//myTree.inOrder();
 		cout << endl;
 	}
-}*/
+}
 
 //Helps with Testing
 bool checkTest(string testName, int whatItShouldBe, int whatItIs) {
