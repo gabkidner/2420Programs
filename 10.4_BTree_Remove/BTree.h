@@ -38,7 +38,6 @@ private:
   shared_ptr<Node<T>> find(const T& item, shared_ptr<Node<T>> ptr);
   shared_ptr<Node<T>> findParent(shared_ptr<Node<T>> childPtr, shared_ptr<Node<T>> ptr);
   void remove(shared_ptr<Node<T>> parent, shared_ptr<Node<T>> toBeRemoved);
-  shared_ptr<Node<T>> findSide(shared_ptr<Node<T>> parent, shared_ptr<Node<T>> child);
 };
 
 template<typename T>
@@ -191,7 +190,13 @@ shared_ptr<Node<T>> BTree<T>::find(const T& item, shared_ptr<Node<T>> ptr){
 
 template<typename T>
 shared_ptr<Node<T>> BTree<T>::findRightMostNode(shared_ptr<Node<T>> ptr){
-  return nullptr;
+  if(!ptr){
+    return nullptr;
+  }
+  if(ptr->right == nullptr){
+    return ptr;
+  }
+  return findRightMostNode(ptr->right);
 }
 
 template<typename T>
@@ -222,50 +227,35 @@ shared_ptr<Node<T>> BTree<T>::findParent(shared_ptr<Node<T>> childPtr, shared_pt
 
 template<typename T>
 void BTree<T>::remove(const T& item){
-  auto temp = find(item);
-  remove(findParent(temp), temp);
+  auto child = find(item);
+  remove(findParent(child), child);
 }
 
 template<typename T>
 void BTree<T>::remove(shared_ptr<Node<T>> parent, shared_ptr<Node<T>> toBeRemoved){
-  auto temp = findSide(parent, toBeRemoved);
   if(toBeRemoved->right != nullptr && toBeRemoved->left != nullptr){
-    if(toBeRemoved->right > toBeRemoved->left){
-      temp = toBeRemoved->right;
-      toBeRemoved->right->left = toBeRemoved->left;
-    }
-    else if(toBeRemoved->left > toBeRemoved->right){
-      temp = toBeRemoved->left;
-      toBeRemoved->left->left = toBeRemoved->right;
+    auto temp = findRightMostNode(toBeRemoved->left);
+    if(temp != nullptr){
+      T dta = temp->data;
+      remove(temp->data);//Crashing
+      toBeRemoved->data = dta;
     }
   }
-  else if(toBeRemoved->right == nullptr && toBeRemoved->left != nullptr){
-    temp->left = toBeRemoved->left;
+  else if(toBeRemoved->left == nullptr){
+    if(parent->right == toBeRemoved){
+      parent->right = toBeRemoved->right;
+    }
+    else if(parent->left == toBeRemoved){
+      parent->left = toBeRemoved->right;
+    }
   }
-  else if(toBeRemoved->right != nullptr && toBeRemoved->left == nullptr){
-    temp->right = toBeRemoved->right;
-  }
-  else if(toBeRemoved->right == nullptr && toBeRemoved->left == nullptr){
-
-    temp = nullptr;
-
-  }
-  if(parent->right == toBeRemoved){
-    parent->right = temp;
-  }
-  else{
-    parent->left = temp;
+  else if(toBeRemoved->right == nullptr){
+    if(parent->right == toBeRemoved){
+      parent->right = toBeRemoved->left;
+    }
+    else if(parent->left == toBeRemoved){
+      parent->left = toBeRemoved->left;
+    }
   }
   toBeRemoved = nullptr;
-}
-
-template<typename T>
-shared_ptr<Node<T>> BTree<T>::findSide(shared_ptr<Node<T>> parent, shared_ptr<Node<T>> child){
-  if(parent->right == child){
-    return parent->right;
-  }
-  if(parent->left == child){
-    return parent->left;
-  }
-  return nullptr;
 }
