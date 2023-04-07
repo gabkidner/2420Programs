@@ -139,25 +139,5 @@ ostream& operator << (ostream & out, const Graph<Type> &g) {
 */
 template <typename Type>
 vector<Type> Graph<Type>::getPath(Type source, Type dest) {
-	int destPos = getVertexPos(dest);
-	int srcPos = getVertexPos(source);
-	if(srcPos < 0 || destPos < 0){
-		throw runtime_error("Vertex(s) not found");
-	}
-	vector<Type> solution;
-	for(unsigned int i = 0; i < verticies.size(); i++){
-		if(verticies[i] == source){
-			solution.push_back(verticies[i]);
-		}
-		else if(verticies[i] == dest){
-			solution.push_back(verticies[i]);
-			return solution;
-		}
-		for(Type v : solution){
-			if(v == source){
-				solution.push_back(verticies[i]);
-			}
-		}
-	}
 	return solution;
 }
