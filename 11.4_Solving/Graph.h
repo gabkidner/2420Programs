@@ -1,9 +1,9 @@
 #pragma once
-
-#include <iostream>
+#include <algorithm>
 #include <memory>
 #include <vector>
 #include <stack>
+#include <iostream>
 using namespace std;
 
 
@@ -123,26 +123,47 @@ vector<Type> Graph<Type>::getPath(Type source, Type dest) {
 	vector<Type> solution;
 	vector<Type> visited;
 	stack<Type> traverse;
-	int* parents = new [verticies.size()];
-	stack.push(source);
-	for(int i = 0; i < parents.size(); i++){
+	int* parents = new int[verticies.size()];
+	bool curVis;
+	traverse.push(source);
+	for(int i = 0; i < verticies.size(); i++){
 		parents[i] = -1;
 	}
-	while(!stack.empty()){
+	while(!traverse.empty()){
 		Type curr = traverse.top();
 		traverse.pop();
 		//See if curr has been visited
-		//if it has been{
-			//continue
+		curVis = false;
+		for(Type i : visited){
+			if(i == curr){
+				curVis = true;
+			}
+		}
 		//else{
+		if(!curVis){
+			visited.push_back(curr);
 			for(unsigned int i = 0; i < edges[getVertexPos(curr)].size(); i++){
 				auto child = edges[getVertexPos(curr)][i];
+				traverse.push(child);
 				if(parents[getVertexPos(child)] == -1){
 					parents[getVertexPos(child)] = getVertexPos(curr);
 				}
 			}
+		}
+	}//Ends while loop
+
+	for(int i = 0; i < verticies.size(); i++){
+		cout << i << " " << verticies[i] << " " << parents[i] << endl;
 	}
-	delete []parents
+	Type curr = dest;
+	while(curr != source){
+		int curPos = getVertexPos(curr);
+		solution.push_back(curr);
+		curr = verticies[parents[curPos]];
+	}
+	solution.push_back(source);
+	reverse(solution.begin(), solution.end());
+	delete []parents;
 	return solution;
 }
 
